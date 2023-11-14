@@ -16,7 +16,7 @@ export const msalApp = new UserAgentApplication({
     clientId: 'e1bbfad1-e81e-4f27-ad24-d1969291e713',
     authority: 'https://login.microsoftonline.com/common',
     validateAuthority: true,
-    postLogoutRedirectUri: 'https://enovation.ie/msteams',
+    postLogoutRedirectUri: 'https://enomsteamstest.z16.web.core.windows.net',
     navigateToLoginRequestUrl: false
   },
   cache: {
