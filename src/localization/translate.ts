@@ -1,4 +1,5 @@
 import { createIntl, createIntlCache } from 'react-intl';
+import _ from 'lodash';
 
 const defaultLocale = 'en-US';
 const supportedLocalesAndFallbackMap: Record<string, string> = {
@@ -64,6 +65,8 @@ const supportedLocalesAndFallbackMap: Record<string, string> = {
   'zh-tw': 'zh-TW',
 };
 
+const supportedLocales = Object.keys(supportedLocalesAndFallbackMap);
+
 export function getUserLocale() {
   let locale = [];
   const url = new URL(document.location.href);
@@ -83,10 +86,10 @@ export function getUserLocale() {
   } else if (navigator.languages) {
     locale.push(navigator.languages[0].toLocaleLowerCase());
   } else if (navigator.language) {
-    return navigator.language.toLowerCase();
-  } else {
-    return defaultLocale;
+    locale.push(navigator.language.toLowerCase());
   }
+
+  return locale[0] ?? defaultLocale;
 }
 
 function getTranslationLocale(locale: string) {
@@ -121,7 +124,7 @@ let intl: any;
 
 export async function getMessages(): Promise<any>
 {
-  const sku = process?.env?.REACT_APP_SKU ?? 'edu';
+  const sku = (import.meta.env.VITE_SKU as string | undefined) ?? 'edu';
   const userLocale = getUserLocale();
 
   if (intl && (intl.locale === getUserLocale())) {

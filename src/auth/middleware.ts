@@ -1,5 +1,6 @@
 import { Middleware } from 'redux';
 import { msalApp } from './msalApp';
+import type { NavigateFunction } from 'react-router-dom';
 import {
   CHECK_FOR_SIGNEDIN_USER_COMMAND,
   OPEN_SIGNIN_DIALOG_COMMAND,
@@ -8,43 +9,46 @@ import {
   SIGNOUT_COMMAND,
   SIGNOUT_COMPLETE_EVENT
 } from './actions';
-import { replace } from 'connected-react-router';
 
-export function createAuthMiddleware(): Middleware {
+export function createAuthMiddleware(getNavigate: () => NavigateFunction): Middleware {
   return store => next => action => {
     if (action.type === CHECK_FOR_SIGNEDIN_USER_COMMAND) {
-      if (!msalApp.getAccount()) {
-        store.dispatch(replace('/signin'));
+      const account = msalApp.getAllAccounts()[0] ?? null;
+      console.log('[AuthMiddleware] CHECK_FOR_SIGNEDIN_USER_COMMAND — account:', account?.username ?? 'none');
+      if (!account) {
+        getNavigate()('/signin', { replace: true });
       }
     }
 
     if (action.type === OPEN_SIGNIN_DIALOG_COMMAND) {
+      console.log('[AuthMiddleware] OPEN_SIGNIN_DIALOG_COMMAND — opening login popup...');
       msalApp
         .loginPopup({
           scopes: ['OnlineMeetings.ReadWrite']
         })
         .then(response => {
-          console.log('Login succeeded');
+          console.log('[AuthMiddleware] Login succeeded for:', response.account?.username);
           store.dispatch({
             type: SIGNIN_COMPLETE_EVENT,
-            idToken: response.idToken
+            account: response.account
           } as SigninCompleteEvent);
         })
         .catch(error => {
-          console.log('Login failed:', error);
+          console.error('[AuthMiddleware] Login failed:', error);
         });
     }
 
     if (action.type === SIGNIN_COMPLETE_EVENT) {
-      store.dispatch(replace('/'));
+      console.log('[AuthMiddleware] SIGNIN_COMPLETE_EVENT — redirecting to /');
+      getNavigate()('/', { replace: true });
     }
 
     if (action.type === SIGNOUT_COMMAND) {
-      msalApp.logout();
+      console.log('[AuthMiddleware] SIGNOUT_COMMAND — logging out');
+      msalApp.logoutPopup().catch(err => console.error('[AuthMiddleware] Logout failed:', err));
       store.dispatch({
         type: SIGNOUT_COMPLETE_EVENT
       });
-      console.log('logged out?');
     }
 
     next(action);

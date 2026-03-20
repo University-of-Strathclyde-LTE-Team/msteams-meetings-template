@@ -4,11 +4,11 @@ import {
   Text,
   PrimaryButton,
   FontWeights
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import { AppState } from './RootReducer';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { useNavigate } from 'react-router-dom';
 import { CHECK_FOR_SIGNEDIN_USER_COMMAND } from './auth/actions';
 import {
   SET_MEETING_COMMAND,
@@ -25,7 +25,7 @@ const boldStyle = { root: { fontWeight: FontWeights.semibold } };
 
 interface CreateLandingPageProps {
   checkForSignedInUser: () => void;
-  onNewMeeting: () => void;
+  resetMeeting: () => void;
 }
 
 const mapStateToProps = (state: AppState) => ({});
@@ -35,16 +35,17 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     dispatch({
       type: CHECK_FOR_SIGNEDIN_USER_COMMAND
     }),
-  onNewMeeting: () => {
+  resetMeeting: () => {
     dispatch({
       type: SET_MEETING_COMMAND,
       meeting: createDefaultMeetingInput()
     } as SetMeetingCommand);
-    dispatch(push('/createMeeting'));
   }
 });
 
 function CreateLandingPageComponent(props: CreateLandingPageProps) {
+  const navigate = useNavigate();
+
   // Check for a signed-in user and go to the signin page if there isn't one
   const checkForSignedInUser = props.checkForSignedInUser;
   React.useEffect(() => {
@@ -76,7 +77,7 @@ function CreateLandingPageComponent(props: CreateLandingPageProps) {
         </Text>
         <PrimaryButton
           className="teamsButton"
-          onClick={() => props.onNewMeeting()}
+          onClick={() => { props.resetMeeting(); navigate('/createMeeting'); }}
           ariaLabel={translate('createLandingPage.create.meeting.ariaLabel')}
         >
           <FormattedMessage id="createLandingPage.create.meeting" />

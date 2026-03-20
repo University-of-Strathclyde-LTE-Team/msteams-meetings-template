@@ -7,11 +7,6 @@ import {
 } from './actions';
 import _ from 'lodash';
 import { createDefaultMeetingInput } from './models';
-import {
-  LOCATION_CHANGE,
-  LocationChangeAction,
-  LocationChangePayload
-} from 'connected-react-router';
 
 const loadInitialState = () => {
   return {
@@ -22,7 +17,7 @@ const loadInitialState = () => {
 
 export const meetingReducer = (
   state: MeetingState,
-  action: MeetingAction | LocationChangeAction<LocationChangePayload>
+  action: MeetingAction
 ) => {
   if (!state) return loadInitialState();
   switch (action.type) {
@@ -39,16 +34,9 @@ export const meetingReducer = (
     case MEETING_CREATED_EVENT:
       return {
         ...state,
-        createdMeeting: action.meeting
+        createdMeeting: action.meeting,
+        creationInProgress: false
       };
-    case LOCATION_CHANGE:
-      if (action.payload.location.pathname === '/createMeeting') {
-        return {
-          ...state,
-          creationInProgress: false
-        };
-      }
-    // falls through
     default:
       return state;
   }
