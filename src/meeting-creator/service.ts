@@ -3,6 +3,24 @@ import { msalApp } from '../auth/msalApp';
 import axios from 'axios';
 import moment from 'moment';
 
+const SILENT_TOKEN_TIMEOUT_MS = 5000;
+
+function acquireTokenSilentWithTimeout(scopes: string[]) {
+  const account = msalApp.getAllAccounts()[0];
+  if (!account) {
+    return Promise.reject(new Error('No signed-in account found'));
+  }
+  return Promise.race([
+    msalApp.acquireTokenSilent({ scopes, account }),
+    new Promise((_, reject) =>
+      setTimeout(
+        () => reject(new Error(`acquireTokenSilent timed out after ${SILENT_TOKEN_TIMEOUT_MS}ms`)),
+        SILENT_TOKEN_TIMEOUT_MS
+      )
+    )
+  ]);
+}
+
 export function createMeetingService() {
   return {
     async createMeeting(meeting: OnlineMeetingInput) {
@@ -13,16 +31,16 @@ export function createMeetingService() {
         endDateTime: meeting.endDateTime?.toISOString(),
       });
 
-      let token;
+      let token: any;
       try {
-        console.log('[MeetingService] Attempting silent token acquisition...');
-        token = await msalApp.acquireTokenSilent({
-          scopes: ['OnlineMeetings.ReadWrite']
-        });
+        console.log(`[MeetingService] Attempting silent token acquisition (timeout: ${SILENT_TOKEN_TIMEOUT_MS}ms)...`);
+        token = await acquireTokenSilentWithTimeout(['OnlineMeetings.ReadWrite']);
         console.log('[MeetingService] Silent token acquired. Expires:', token.expiresOn);
       } catch (ex) {
-        console.warn('[MeetingService] Silent token failed, falling back to popup:', ex);
+        const err = ex as any;
+        console.warn('[MeetingService] Silent token failed, falling back to popup:', err.message ?? err);
         try {
+          console.log('[MeetingService] Opening token acquisition popup...');
           token = await msalApp.acquireTokenPopup({
             scopes: ['OnlineMeetings.ReadWrite']
           });
