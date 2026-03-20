@@ -1,8 +1,8 @@
 import { PublicClientApplication, Configuration } from '@azure/msal-browser';
 
-const clientId = process.env.REACT_APP_AAD_CLIENT_ID;
-const authority = process.env.REACT_APP_AAD_AUTHORITY ?? 'https://login.microsoftonline.com/common';
-const postLogoutRedirectUri = process.env.REACT_APP_POST_LOGOUT_REDIRECT_URI ?? window.location.origin;
+const clientId = import.meta.env.VITE_AAD_CLIENT_ID as string | undefined;
+const authority = (import.meta.env.VITE_AAD_AUTHORITY as string | undefined) ?? 'https://login.microsoftonline.com/common';
+const postLogoutRedirectUri = (import.meta.env.VITE_POST_LOGOUT_REDIRECT_URI as string | undefined) ?? window.location.origin;
 
 if (!clientId) {
   throw new Error('REACT_APP_AAD_CLIENT_ID environment variable is required');

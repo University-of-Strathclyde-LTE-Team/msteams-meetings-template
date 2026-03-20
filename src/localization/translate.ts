@@ -124,7 +124,7 @@ let intl: any;
 
 export async function getMessages(): Promise<any>
 {
-  const sku = process?.env?.REACT_APP_SKU ?? 'edu';
+  const sku = (import.meta.env.VITE_SKU as string | undefined) ?? 'edu';
   const userLocale = getUserLocale();
 
   if (intl && (intl.locale === getUserLocale())) {
