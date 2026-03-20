@@ -14,7 +14,7 @@ import CreateLandingPage from './CreateLandingPage';
 import ErrorPage from './ErrorPage';
 import moment from 'moment';
 import 'moment/min/locales.min';
-import { initializeIcons } from 'office-ui-fabric-react';
+import { initializeIcons } from '@fluentui/font-icons-mdl2';
 import { getUserLocale } from './localization/translate';
 
 moment.locale(getUserLocale());

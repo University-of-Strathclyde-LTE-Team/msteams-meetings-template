@@ -15,12 +15,12 @@ import {
   IComboBox,
   Spinner,
   SpinnerSize
-} from 'office-ui-fabric-react';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+} from '@fluentui/react';
+import { FontIcon } from '@fluentui/react';
 import { AppState } from './RootReducer';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { mergeStyles } from 'office-ui-fabric-react/lib/Styling';
+import { mergeStyles } from '@fluentui/merge-styles';
 import _ from 'lodash';
 import moment, { Moment, Duration } from 'moment';
 import { OnlineMeetingInput } from './meeting-creator/models';

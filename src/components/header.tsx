@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Text, FontWeights, IconButton } from 'office-ui-fabric-react';
+import { Text, FontWeights, IconButton } from '@fluentui/react';
 import { AppState } from '../RootReducer';
 import { Dispatch } from 'redux';
 import { SIGNOUT_COMMAND } from '../auth/actions';

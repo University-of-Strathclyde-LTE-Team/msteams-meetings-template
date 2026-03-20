@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack, Text, PrimaryButton } from 'office-ui-fabric-react';
+import { Stack, Text, PrimaryButton } from '@fluentui/react';
 import { AppState } from './RootReducer';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';

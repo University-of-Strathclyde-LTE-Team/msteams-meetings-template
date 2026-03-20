@@ -4,7 +4,7 @@ import {
   Text,
   PrimaryButton,
   FontWeights
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import { AppState } from './RootReducer';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
