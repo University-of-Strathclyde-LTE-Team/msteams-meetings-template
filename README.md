@@ -66,32 +66,32 @@ You'll need to register an app through the following process:
 
     Copy the Application Id. This is the unique identifier for your app.
 
-7. Under **Manage** on the left-hand pane, click **Authentication**. 
-7. CLick **Add a platform** and select **Web**.
-7. Under **Redirect URIs**, enter the following URIs:
-    * `http://localhost:3000/`
+7. Under **Manage** on the left-hand pane, click **Authentication**.
+7. Click **Add a platform** and select **Single-page application**.
+7. Under **Redirect URIs**, enter your app's URL (e.g. `http://localhost:3000/`).
 
-    On the same page, under **Implicit grant**, make sure that both **Access tokens** and **ID tokens** checkboxes are checked.
+    Click **Configure** to save your changes. Implicit grant is not required and should not be enabled.
 
-    Click **Save** to save your changes.
-
-7. Under **Manage** on the left-hand pane, click **API permissions** and then **Add a  permission**. Select **Microsoft Graph** and then **Delegated permissions**. Add the following permissions:
+7. Under **Manage** on the left-hand pane, click **API permissions** and then **Add a permission**. Select **Microsoft Graph** and then **Delegated permissions**. Add the following permissions:
     * `OnlineMeetings.ReadWrite` (Read and create user's online meetings) permission.
 
 ### Update the configuration
 
-Change the following values in the `msalApp.ts` file:
-* **clientId** - Set this to the Application (client) ID of the AAD application that you registered
+Update the following values in your `.env` file (copy from `.env.example`):
+* **VITE_AAD_CLIENT_ID** - Set this to the Application (client) ID of the AAD application that you registered
+* **VITE_AAD_AUTHORITY** - Set this to `https://login.microsoftonline.com/<tenant-id>`
+
+> **Note:** The Azure AD app must be registered as a **Single-page application** platform with your redirect URI (e.g. `http://localhost:3000/`). Implicit grant is not required.
 
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `yarn install`
+### `npm install`
 
 Installs all the dependencies for the app.
 
-### `yarn start`
+### `npm start`
 
 Runs the app in the development mode.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -99,30 +99,21 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
 
-### `yarn build`
+### `npm run build`
 
-Builds the app for production to the `build` folder.<br />
+Builds the app for production to the `dist` folder.<br />
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### `npm run build:health`
 
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you eject, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can eject at any time. This command will remove the single build dependency from your project. 
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except eject will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own. 
-
-You don’t have to ever use eject. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it. 
+Builds the health SKU variant to the `dist` folder.
 
 ## Learn More
-You can learn more in the [Create React App documentation](https://create-react-app.dev/docs/getting-started/). 
 
-To learn React, check out the [React documentation](https://reactjs.org/). 
+To learn React, check out the [React documentation](https://reactjs.org/).
 
 ## Frequently Asked Questions
 
