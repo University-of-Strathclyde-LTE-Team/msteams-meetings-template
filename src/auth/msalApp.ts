@@ -8,11 +8,16 @@ if (!clientId) {
   throw new Error('VITE_AAD_CLIENT_ID environment variable is required');
 }
 
+// Ensure trailing slash so the URI exactly matches the SPA redirect registration in Azure AD.
+// Vite dev server redirects bare-origin requests to origin + '/', so MSAL uses the
+// post-redirect URL (with slash) when exchanging the auth code at the token endpoint.
+const redirectUri = window.location.origin.replace(/\/?$/, '/');
+
 const msalConfig: Configuration = {
   auth: {
     clientId,
     authority,
-    redirectUri: window.location.origin,
+    redirectUri,
     postLogoutRedirectUri,
     navigateToLoginRequestUrl: false,
   },
