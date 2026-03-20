@@ -1,7 +1,8 @@
 {
   "name": "teams-lms-meeting-creator",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
+  "homepage": "./",
   "dependencies": {
     "@types/react-intl": "3.0.0",
     "@uifabric/fluent-theme": "7.1.35",

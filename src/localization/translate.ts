@@ -65,8 +65,23 @@ const supportedLocalesAndFallbackMap: Record<string, string> = {
 };
 
 export function getUserLocale() {
-  if (navigator.languages) {
-    return navigator.languages[0].toLowerCase();
+  let locale = [];
+  const url = new URL(document.location.href);
+  let paramlocale = url.searchParams.get('locale');
+
+  if (paramlocale && !_.includes(supportedLocales, paramlocale)) {
+    if (paramlocale.indexOf("_") > -1) {
+      paramlocale = paramlocale.split('_')[0];
+    } else if (paramlocale.indexOf("-") > -1) {
+      paramlocale = paramlocale.split('-')[0];
+    }
+
+  }
+
+  if (paramlocale && _.includes(supportedLocales, paramlocale)) {
+    locale.push(paramlocale);
+  } else if (navigator.languages) {
+    locale.push(navigator.languages[0].toLocaleLowerCase());
   } else if (navigator.language) {
     return navigator.language.toLowerCase();
   } else {

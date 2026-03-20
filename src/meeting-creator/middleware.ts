@@ -23,7 +23,31 @@ export function createMeetingMiddleware(): Middleware {
     }
 
     if (action.type === MEETING_CREATED_EVENT) {
-      store.dispatch(push('/copyMeeting'));
+      const url = new URL(document.location.href);
+      let clientDomain = url.searchParams.get('url');
+      let clientEditor = url.searchParams.get('editor');
+      if (clientDomain) {
+        let returnUrl = new URL(clientDomain + '/lib/editor/tiny/plugins/teamsmeeting/result.php');
+        if (clientEditor === 'atto') {
+          returnUrl = new URL(clientDomain + '/lib/editor/atto/plugins/teamsmeeting/result.php');
+        }
+        let returnUrlSearchParams = returnUrl.searchParams;
+        returnUrlSearchParams.set('link', action.meeting.joinWebUrl);
+        returnUrlSearchParams.set('title', action.meeting.subject);
+        returnUrlSearchParams.set('preview', action.meeting.preview);
+        let courseId = url.searchParams.get('courseid');
+        if (courseId) {
+          returnUrlSearchParams.set('courseid', courseId);
+        }
+        let msession = url.searchParams.get('msession');
+        if (msession) {
+          returnUrlSearchParams.set('session', msession);
+        }
+        returnUrl.search = returnUrlSearchParams.toString();
+        document.location.href = returnUrl.toString();
+      } else {
+          store.dispatch(push("/copyMeeting"));
+      }
     }
     next(action);
   };
