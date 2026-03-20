@@ -12,11 +12,7 @@ yarn build            # Production build (edu SKU, default)
 yarn build:health     # Production build for the health SKU
 ```
 
-> **Node 17+ compatibility:** `react-scripts` 3.x uses webpack 4 which is incompatible with the OpenSSL changes in Node 17+. Until `react-scripts` is upgraded (planned in Phase 1), prefix build/start commands with `NODE_OPTIONS=--openssl-legacy-provider`:
-> ```bash
-> NODE_OPTIONS=--openssl-legacy-provider yarn build
-> NODE_OPTIONS=--openssl-legacy-provider yarn start
-> ```
+There are no test or lint scripts defined. ESLint runs automatically via `react-scripts` during `start` and `build`.
 
 ## Architecture
 
