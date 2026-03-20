@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "./",
   "dependencies": {
+    "@azure/msal-browser": "^3.30.0",
     "@types/react-intl": "3.0.0",
     "@uifabric/fluent-theme": "7.1.35",
     "ajv": "^8.0.0",
@@ -12,7 +13,6 @@
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
     "moment-timezone": "^0.5.45",
-    "msal": "1.2.1",
     "office-ui-fabric-react": "7.103.0",
     "react": "16.13.0",
     "react-dom": "16.13.0",

@@ -1,4 +1,4 @@
-import { IdToken } from 'msal/lib-commonjs/IdToken';
+import { AccountInfo } from '@azure/msal-browser';
 
 export const CHECK_FOR_SIGNEDIN_USER_COMMAND = 'CheckForSignedInUserCommand';
 export interface CheckForSignedInUserCommand {
@@ -13,7 +13,7 @@ export interface OpenSigninDialogCommand {
 export const SIGNIN_COMPLETE_EVENT = 'SigninCompleteEvent';
 export interface SigninCompleteEvent {
   type: typeof SIGNIN_COMPLETE_EVENT;
-  idToken: IdToken;
+  account: AccountInfo;
 }
 
 export const SIGNOUT_COMMAND = 'SignoutCommand';

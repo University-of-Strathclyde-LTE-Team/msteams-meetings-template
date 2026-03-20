@@ -1,5 +1,4 @@
-//shamelessly stolen from: https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/samples/react-sample-app/src/auth-utils.js
-import { UserAgentApplication } from 'msal';
+import { PublicClientApplication, Configuration } from '@azure/msal-browser';
 
 const clientId = process.env.REACT_APP_AAD_CLIENT_ID;
 const authority = process.env.REACT_APP_AAD_AUTHORITY ?? 'https://login.microsoftonline.com/common';
@@ -9,29 +8,17 @@ if (!clientId) {
   throw new Error('REACT_APP_AAD_CLIENT_ID environment variable is required');
 }
 
-function isIE() {
-  const ua = window.navigator.userAgent;
-  const msie = ua.indexOf('MSIE ') > -1;
-  const msie11 = ua.indexOf('Trident/') > -1;
-
-  // If you as a developer are testing using Edge InPrivate mode, please add "isEdge" to the if check
-  // const isEdge = ua.indexOf("Edge/") > -1;
-  return msie || msie11;
-}
-
-export const msalApp = new UserAgentApplication({
+const msalConfig: Configuration = {
   auth: {
     clientId,
     authority,
-    validateAuthority: true,
+    redirectUri: window.location.origin,
     postLogoutRedirectUri,
-    navigateToLoginRequestUrl: false
+    navigateToLoginRequestUrl: false,
   },
   cache: {
     cacheLocation: 'sessionStorage',
-    storeAuthStateInCookie: isIE()
   },
-  system: {
-    navigateFrameWait: 0
-  }
-});
+};
+
+export const msalApp = new PublicClientApplication(msalConfig);

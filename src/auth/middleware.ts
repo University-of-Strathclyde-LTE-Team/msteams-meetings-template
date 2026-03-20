@@ -13,8 +13,8 @@ import { replace } from 'connected-react-router';
 export function createAuthMiddleware(): Middleware {
   return store => next => action => {
     if (action.type === CHECK_FOR_SIGNEDIN_USER_COMMAND) {
-      const account = msalApp.getAccount();
-      console.log('[AuthMiddleware] CHECK_FOR_SIGNEDIN_USER_COMMAND — account:', account?.userName ?? 'none');
+      const account = msalApp.getAllAccounts()[0] ?? null;
+      console.log('[AuthMiddleware] CHECK_FOR_SIGNEDIN_USER_COMMAND — account:', account?.username ?? 'none');
       if (!account) {
         store.dispatch(replace('/signin'));
       }
@@ -27,10 +27,10 @@ export function createAuthMiddleware(): Middleware {
           scopes: ['OnlineMeetings.ReadWrite']
         })
         .then(response => {
-          console.log('[AuthMiddleware] Login succeeded for:', response.account?.userName);
+          console.log('[AuthMiddleware] Login succeeded for:', response.account?.username);
           store.dispatch({
             type: SIGNIN_COMPLETE_EVENT,
-            idToken: response.idToken
+            account: response.account
           } as SigninCompleteEvent);
         })
         .catch(error => {
@@ -45,7 +45,7 @@ export function createAuthMiddleware(): Middleware {
 
     if (action.type === SIGNOUT_COMMAND) {
       console.log('[AuthMiddleware] SIGNOUT_COMMAND — logging out');
-      msalApp.logout();
+      msalApp.logoutPopup().catch(err => console.error('[AuthMiddleware] Logout failed:', err));
       store.dispatch({
         type: SIGNOUT_COMPLETE_EVENT
       });
