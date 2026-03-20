@@ -20,7 +20,7 @@ steps:
       alertWarningLevel: 'High'
   - task: CopyFiles@2
     inputs: 
-      sourceFolder: 'build'
+      sourceFolder: 'dist'
       targetFolder: '$(Build.ArtifactStagingDirectory)/edu'
   - task: PublishBuildArtifacts@1
     displayName: 'Upload Artifact'
@@ -29,13 +29,13 @@ steps:
       artifactName: 'teams-edu-event-creator'
   - task: DeleteFiles@1
     inputs:
-      SourceFolder: 'build'
+      SourceFolder: 'dist'
       Contents: '*'
       RemoveSourceFolder: true
   - script: yarn build:health
   - task: CopyFiles@2
     inputs: 
-      sourceFolder: 'build'
+      sourceFolder: 'dist'
       targetFolder: '$(Build.ArtifactStagingDirectory)/health'
   - task: PublishBuildArtifacts@1
     displayName: 'Upload Artifact'
