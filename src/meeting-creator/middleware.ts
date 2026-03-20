@@ -1,9 +1,9 @@
 import { Middleware } from 'redux';
 import { CREATE_MEETING_COMMAND, MEETING_CREATED_EVENT } from './actions';
 import { createMeetingService } from './service';
-import { push } from 'connected-react-router';
+import type { NavigateFunction } from 'react-router-dom';
 
-export function createMeetingMiddleware(): Middleware {
+export function createMeetingMiddleware(getNavigate: () => NavigateFunction): Middleware {
   const service = createMeetingService();
 
   return store => next => action => {
@@ -24,7 +24,7 @@ export function createMeetingMiddleware(): Middleware {
         .catch(error => {
           console.error('[MeetingMiddleware] createMeeting rejected, navigating to /error');
           console.error(error);
-          store.dispatch(push('/error'));
+          getNavigate()('/error');
         });
     }
 
@@ -59,7 +59,7 @@ export function createMeetingMiddleware(): Middleware {
       } else {
         console.log('[MeetingMiddleware] No clientDomain — navigating to /copyMeeting');
         console.groupEnd();
-        store.dispatch(push('/copyMeeting'));
+        getNavigate()('/copyMeeting');
       }
     }
 

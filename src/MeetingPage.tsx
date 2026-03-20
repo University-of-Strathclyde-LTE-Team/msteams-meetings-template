@@ -29,7 +29,7 @@ import {
   CREATE_MEETING_COMMAND,
   CreateMeetingCommand
 } from './meeting-creator/actions';
-import { goBack } from 'connected-react-router';
+import { useNavigate } from 'react-router-dom';
 import { hasValidSubject } from './meeting-creator/validators';
 import { FormattedMessage } from 'react-intl';
 import { translate } from './localization/translate';
@@ -227,7 +227,6 @@ interface MeetingPageProps {
   creationInProgress: boolean;
   setMeeting: (meeting: OnlineMeetingInput) => void;
   createMeeting: (meeting: OnlineMeetingInput) => void;
-  cancel: () => void;
 }
 
 const mapStateToProps = (state: AppState) => ({
@@ -252,12 +251,12 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
       type: CREATE_MEETING_COMMAND,
       meeting
     } as CreateMeetingCommand);
-  },
-  cancel: () => dispatch(goBack())
+  }
 });
 
 function MeetingPageComponent(props: MeetingPageProps) {
   const [validationEnabled, setValidationEnabled] = useState(false);
+  const navigate = useNavigate();
 
   function onSubjectChanged(
     evt: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -349,7 +348,7 @@ function MeetingPageComponent(props: MeetingPageProps) {
               <DefaultButton
                 className="teamsButtonInverted"
                 disabled={props.creationInProgress}
-                onClick={() => props.cancel()}
+                onClick={() => navigate(-1)}
                 ariaLabel={translate('meetingPage.cancel.ariaLabel')}
               >
                 <FormattedMessage id="meetingPage.cancel" />
@@ -411,7 +410,7 @@ function MeetingPageComponent(props: MeetingPageProps) {
           <DefaultButton
             className="teamsButtonInverted teamsButtonFullWidth"
             disabled={props.creationInProgress}
-            onClick={() => props.cancel()}
+            onClick={() => navigate(-1)}
             ariaLabel={translate('meetingPage.cancel.ariaLabel')}
           >
             <FormattedMessage id="meetingPage.cancel" />
